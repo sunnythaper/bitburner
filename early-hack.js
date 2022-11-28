@@ -80,11 +80,14 @@ export function hackTarget(target, ns) {
 export function runScriptOnTarget(target, ns) {
   // DEFINE SCRIPTS TO RUN ON TARGETS
   let mainScript = 'getMoney.js';
+  let hackTarget = 'max-hardware';
+  let moneyThresh = ns.getServerMaxMoney(hackTarget) * 0.75;
+  let securityThresh = ns.getServerMinSecurityLevel(hackTarget) + 5;
 
   if (ns.hasRootAccess(target) == true) {
       // COPY SCRIPTS TO TARGET
       if (!ns.fileExists(mainScript, target)) {
-          ns.scp(mainScript, target, "home");
+        ns.scp(mainScript, target, "home");
       }
 
       // GET MAX THREADS FOR SCRIPT
@@ -92,7 +95,7 @@ export function runScriptOnTarget(target, ns) {
 
       // RUN SCRIPTS ON TARGET
       if (threads > 0) {
-        ns.exec(mainScript, target, threads, "max-hardware");
+        ns.exec(mainScript, target, threads, hackTarget, moneyThresh, securityThresh);
       }
   }
 }
