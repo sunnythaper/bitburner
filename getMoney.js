@@ -1,7 +1,6 @@
 /** @param {NS} ns */
-export async function main(ns) {
+export async function main(ns, hostname=arguments[0].args[0]) {
   // DEFINE HOST VARIABLES
-  let hostname = ns.getHostname();
   let moneyThresh = ns.getServerMaxMoney(hostname) * 0.75;
   let securityThresh = ns.getServerMinSecurityLevel(hostname) + 5;
 

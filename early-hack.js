@@ -3,15 +3,19 @@
 **/
 
 export async function main(ns) {
-  // DEFINE HACKING TARGETS
-  let targets = getTargets(ns);
+  while (true) {
+    // DEFINE HACKING TARGETS
+    let targets = getTargets(ns);
 
-  for (let target of targets) {
-      // HACK TARGET
-      hackTarget(target, ns);
+    for (let target of targets) {
+        // HACK TARGET
+        hackTarget(target, ns);
 
-      // RUN SCRIPTS ON TARGET
-      runScriptOnTarget(target, ns);
+        // RUN SCRIPTS ON TARGET
+        runScriptOnTarget(target, ns);
+    }
+
+    await ns.sleep(10);
   }
 }
 
@@ -42,7 +46,7 @@ export function hackTarget(target, ns) {
   // CHECK IF WE HAVE ROOT ACCESS
   if (ns.hasRootAccess(target) == false) {
       // GET NUMBER OF PORTS REQUIRED
-      let portCount = ns.getServerNumPortsRequired;
+      let portCount = ns.getServerNumPortsRequired(target);
 
       // BRUTESSH
       if (ns.fileExists("BruteSSH.exe", "home")) {
@@ -53,6 +57,12 @@ export function hackTarget(target, ns) {
       // FTPCRACK
       if (ns.fileExists("FTPCrack.exe", "home")) {
           ns.ftpcrack(target);
+          portCount -= 1;
+      }
+
+      // RELAYSMTP
+      if (ns.fileExists("relaySMTP.exe", "home")) {
+          ns.relaysmtp(target);
           portCount -= 1;
       }
 
@@ -73,13 +83,7 @@ export function runScriptOnTarget(target, ns) {
 
   if (ns.hasRootAccess(target) == true) {
       // COPY SCRIPTS TO TARGET
-      if (ns.fileExists(mainScript, target)) {
-          if (ns.getScriptRam(mainScript, "home") != ns.getScriptRam(mainScript, target)) {
-              ns.killall(target);
-              ns.rm(mainScript, target);
-              ns.scp(mainScript, target, "home");
-          }
-      } else {
+      if (!ns.fileExists(mainScript, target)) {
           ns.scp(mainScript, target, "home");
       }
 
@@ -87,6 +91,8 @@ export function runScriptOnTarget(target, ns) {
       const threads = Math.floor(ns.getServerMaxRam(target)/ns.getScriptRam(mainScript, "home"));
 
       // RUN SCRIPTS ON TARGET
-      ns.exec(mainScript, target, threads);
+      if (threads > 0) {
+        ns.exec(mainScript, target, threads, "max-hardware");
+      }
   }
 }
