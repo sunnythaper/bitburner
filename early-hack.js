@@ -91,7 +91,8 @@ export function hackTarget(target, ns) {
 
 export function runScriptOnTarget(target, ns) {
   // DEFINE SCRIPTS TO RUN ON TARGETS
-  let mainScript = "node/getMoney.js";
+  // let mainScript = "getMoney.js"
+  let mainScript = "/node/getMoney.js";
   let hackTarget = "phantasy";
   let moneyThresh = ns.getServerMaxMoney(hackTarget) * 0.75;
   let securityThresh = ns.getServerMinSecurityLevel(hackTarget) + 5;
