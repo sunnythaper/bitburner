@@ -1,0 +1,17 @@
+{
+  "daemons": {
+    "workerUpdate": "/daemon/workerUpdate.js",
+    "supervisor": "/daemon/supervisor.js"
+  },
+  "controller": {
+    "database": "/db/nodes.script",
+    "home": "home"
+  },
+  "worker": {
+    "daemon": "/node/worker.js",
+    "database": "/db/workerSettings.script",
+    "defaultTarget": "n00dles",
+    "moneyThreshold": 0.75,
+    "securityThreshold": 5
+  }
+}

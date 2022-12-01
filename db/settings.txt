@@ -1,9 +1,0 @@
-{
-  "daemons": {
-    "supervisor": "/daemon/supervisor.js"
-  },
-  "nodes": {
-    "database": "/db/nodes.txt",
-    "home": "home"
-  }
-}
